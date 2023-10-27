@@ -23,6 +23,8 @@ def main():
     clock = p.time.Clock()
     screen.fill("white")
     gs = ChessEngine.GameState()
+    validMoves = gs.getValidMoves()
+    moveMade = False
     # print(gs.board)
     loadImages()
     running = True
@@ -39,7 +41,7 @@ def main():
                 col = location[0]//SQ_SIZE
                 row = location[1]//SQ_SIZE
                 # Kiểm tra ô vuông được chọn cùng vị trí với ô vuong được nhấp
-                if sqSelected == (row,col):
+                if sqSelected == (row, col):
                     sqSelected = ()      #bỏ chọn
                     playerClicks = []    #xoá sạch click của người chơi
                 else:
@@ -48,7 +50,9 @@ def main():
                 if len(playerClicks) == 2:
                     move = ChessEngine.Move(playerClicks[0], playerClicks[1], gs.board)
                     print(move.getChessNotation(move.startRow, move.startCol))
-                    gs.makeMove(move)
+                    if move in validMoves:
+                        gs.makeMove(move)
+                        moveMade = True
                     sqSelected = () # reset click người chơi
                     playerClicks = []
 
@@ -57,6 +61,10 @@ def main():
             elif e.type == p.KEYDOWN:
                 if e.key == p.K_z: #hoan tac khi nhan Z
                     gs.undoMove()
+                    moveMade = True
+            if moveMade:
+                validMoves = gs.getValidMoves()
+                moveMade = False
 
         drawGameState(screen, gs)
         # giới hạn khung hình trò chơi
