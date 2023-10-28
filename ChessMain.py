@@ -21,7 +21,7 @@ def main():
     p.display.set_caption("DACS4-Chess")
     # p.display.set_icon(p.image.load('bK.png'))
     clock = p.time.Clock()
-    screen.fill("white")
+    screen.fill((255, 255, 255))
     gs = ChessEngine.GameState()
     validMoves = gs.getValidMoves()
     moveMade = False
