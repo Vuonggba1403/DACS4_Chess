@@ -53,8 +53,11 @@ def main():
                     if move in validMoves:
                         gs.makeMove(move)
                         moveMade = True
-                    sqSelected = () # reset click người chơi
-                    playerClicks = []
+                        sqSelected = () # reset click người chơi
+                        playerClicks = []
+                    else:
+                        playerClicks = [sqSelected]
+
 
 
              #Xu li key
@@ -84,7 +87,7 @@ Ve cac hinh vuông bàn cờ
 
 
 def drawBoard(screen):
-    colors = [p.Color((255,237, 204)), p.Color((240, 179, 126))]
+    colors = [p.Color((255, 255, 255)), p.Color((115, 178, 255))]
     for r in range(DIMENSION):
         for c in range(DIMENSION):
             # tổng là chẵn -> màu trắng, lẻ -> màu xám đậm
@@ -104,6 +107,7 @@ def drawPieces(screen, board):
             if piece != "--":
                 #sử dụng blit để của đối tượng screen ể vẽ hình ảnh quân cờ lên màn hình
                 screen.blit(IMAGES[piece], p.Rect(c * SQ_SIZE, r * SQ_SIZE, SQ_SIZE, SQ_SIZE))
+
 
 
 if __name__ == "__main__":
