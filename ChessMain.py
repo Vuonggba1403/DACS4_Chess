@@ -1,6 +1,7 @@
 import pygame as p
 from Chess import ChessEngine
-WIDTH = HEIGHT = 512
+
+WIDTH = HEIGHT = 650
 DIMENSION = 8
 SQ_SIZE = HEIGHT // DIMENSION
 MAX_FPS = 15
@@ -28,41 +29,42 @@ def main():
     # print(gs.board)
     loadImages()
     running = True
-    sqSelected = ()   #không có ô vuông nào được chọn, theo dõi lần nhấp chuột cuối cùng của người dùng
-    playerClicks = []  #theo dõi số lần nhấp chuột của người chơi
+    sqSelected = ()  # không có ô vuông nào được chọn, theo dõi lần nhấp chuột cuối cùng của người dùng
+    playerClicks = []  # theo dõi số lần nhấp chuột của người chơi
     while running:
         for e in p.event.get():
             if e.type == p.QUIT:
                 running = False
 
-            #trinh xu li chuot
+            # trinh xu li chuot
             elif e.type == p.MOUSEBUTTONDOWN:
-                location = p.mouse.get_pos()  #(x,y) vị trí của chuột
-                col = location[0]//SQ_SIZE
-                row = location[1]//SQ_SIZE
+                location = p.mouse.get_pos()  # (x,y) vị trí của chuột
+                col = location[0] // SQ_SIZE
+                row = location[1] // SQ_SIZE
                 # Kiểm tra ô vuông được chọn cùng vị trí với ô vuong được nhấp
                 if sqSelected == (row, col):
-                    sqSelected = ()      #bỏ chọn
-                    playerClicks = []    #xoá sạch click của người chơi
+                    sqSelected = ()  # bỏ chọn
+                    playerClicks = []  # xoá sạch click của người chơi
                 else:
-                    sqSelected = (row, col) # lưu trữ ví trí ô vuông mới được chọn
+                    sqSelected = (row, col)  # lưu trữ ví trí ô vuông mới được chọn
                     playerClicks.append(sqSelected)  # thêm giá trị của biến vào sqSelected vào ds playerClicks
                 if len(playerClicks) == 2:
                     move = ChessEngine.Move(playerClicks[0], playerClicks[1], gs.board)
                     print(move.getChessNotation(move.startRow, move.startCol))
-                    if move in validMoves:
-                        gs.makeMove(move)
-                        moveMade = True
-                        sqSelected = () # reset click người chơi
-                        playerClicks = []
-                    else:
-                        playerClicks = [sqSelected]
+                    for i in range(len(validMoves)):
+                        if move == validMoves[i]:
+                            gs.makeMove(validMoves[i])
+                            moveMade = True
+                            sqSelected = ()  # reset click người chơi
+                            playerClicks = []
+                        if not moveMade:
+                            playerClicks = [sqSelected]
 
 
 
-             #Xu li key
+            # Xu li key
             elif e.type == p.KEYDOWN:
-                if e.key == p.K_z: #hoan tac khi nhan Z
+                if e.key == p.K_z:  # hoan tac khi nhan Z
                     gs.undoMove()
                     moveMade = True
             if moveMade:
@@ -87,7 +89,7 @@ Ve cac hinh vuông bàn cờ
 
 
 def drawBoard(screen):
-    colors = [p.Color((255, 255, 255)), p.Color((115, 178, 255))]
+    colors = [p.Color((233, 237, 204)), p.Color((119, 153, 84))]
     for r in range(DIMENSION):
         for c in range(DIMENSION):
             # tổng là chẵn -> màu trắng, lẻ -> màu xám đậm
@@ -105,9 +107,8 @@ def drawPieces(screen, board):
         for c in range(DIMENSION):
             piece = board[r][c]
             if piece != "--":
-                #sử dụng blit để của đối tượng screen ể vẽ hình ảnh quân cờ lên màn hình
+                # sử dụng blit để của đối tượng screen ể vẽ hình ảnh quân cờ lên màn hình
                 screen.blit(IMAGES[piece], p.Rect(c * SQ_SIZE, r * SQ_SIZE, SQ_SIZE, SQ_SIZE))
-
 
 
 if __name__ == "__main__":
